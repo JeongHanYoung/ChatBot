@@ -15,7 +15,7 @@ var dbConfig = {
 	password: "taiho9788!",
 	options: {
 		encrypt: true,
-		database: "taiholab_2",
+		database: "chatMng",
 		rowCollectionOnRequestCompletion: true
 	}
 };
@@ -60,6 +60,45 @@ function Start(query,callback) {
 	})
 }
 
+var Test = [
+	function (callback) {
+		console.log('testing rows from the Table...');
+
+		// Read all rows from table
+		
+		var testQueryString = 'SELECT QUESTION , ANSWER FROM CB_COMMON;';
+		var request = new Request(testQueryString, function (err, rowCount, rows) {
+			if (err) {
+				console.log(err);
+			} else {
+				console.log(rowCount + ' row(s) returned');
+				//callback(null);
+			}
+
+			// Print the rows read
+			var result = "";
+			var rowObject = {};
+			for (var i = 0; i < rowCount; i++) {
+				var singleRowData = rows[i];
+				console.log(singleRowData.length);
+				for (var j = 0; j < singleRowData.length; j++) {
+					var tempColName = singleRowData[j].metadata.colName;
+					var tempColData = singleRowData[j].value;
+					console.log("tempColName : " + tempColName + " || tempColData : " + tempColData);
+					rowObject[tempColName] = tempColData;
+				}
+				jsonArray.push(rowObject);
+			}
+			console.log("jsonArray : " + jsonArray);
+			callback(null, jsonArray);
+		});
+
+		// Execute SQL statement
+		conn.execSql(request);
+	}
+];
+
+/*
 var Read = [
 	function (callback) {
 		console.log('Reading rows from the Table...');
@@ -96,7 +135,7 @@ var Read = [
 		conn.execSql(request);
 	}
 ];
-
+*/
 //function Read(callback) {
 //	console.log('Reading rows from the Table...');
 
