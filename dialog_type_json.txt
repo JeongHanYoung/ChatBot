@@ -1,0 +1,11 @@
+﻿- Dialog Type별 Json 방식
+
+1. 텍스트만 있는 다이얼로그
+{"type": "text", "contents": [{"text": "--텍스트내용--"}]}
+2. 텍스트와 버튼이 있는 다이얼로그 
+{"type": "carousel", "contents": [{"text": "--텍스트내용--", "buttons": [{"type": "imBack", "title": "--버튼명--", "value": "--클릭시문자--"}]}]}
+3. 캐러절 이미지
+{"type": "carousel", "contents": [{"text": "--텍스트내용--", "url": "--이미지주소--" "buttons": [{"type": "imBack", "title": "--버튼명--", "value": "--클릭시문자--"}]}]}
+* buttons key가 없거나 배열 길이가 0이면 버튼이 없는 캐러절로 표시
+4. 미디어 버튼이 있는 다이얼로그
+{"type": "media", "contents": [{"text": "--텍스트내용--", "url": "--미디어 이미지 주소--"}]}

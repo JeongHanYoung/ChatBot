@@ -1,0 +1,29 @@
+{
+  "name": "chat-bot",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "description": "chatBot",
+  "author": {
+    "name": "Taiho"
+  },
+  "dependencies": {
+    "async": "^2.6.0",
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.0",
+    "debug": "^2.2.0",
+    "ejs": "^2.5.7",
+    "express": "^4.14.0",
+    "morgan": "^1.7.0",
+    "mssql": "^4.1.0",
+    "request": "^2.83.0",
+    "rivescript": "^1.18.0",
+    "tedious": "^2.1.5"
+  },
+  "engines": {
+    "node": "~6.10.x"
+  }
+}

@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8;" />
+
+    <title>RiveScript ChatBot</title>
+    <!-- CSS -->
+    <link rel='stylesheet' href='/css/botchat.css' />
+    <link rel='stylesheet' href='/css/style.css' />
+    <link rel='stylesheet' href='/css/bootstrap_v1.css' />
+    <link rel='stylesheet' href='/css/HyundaiSansTextKRRegular.css' />
+    <link rel='stylesheet' href='/css/css_index.css' />
+
+    <!-- JS -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="/js/js_index.js" ></script>
+</head>
+
+<body>
+    <input type="hidden" name="menuMsg" id="menuMsg" /> <!-- 메뉴 선택 메시지 -->
+    <!-- 챗봇 영역 -->
+    <div class="bot-layer">
+        <div class="top-layer">
+            <div class="top-btn">
+                <button class="topBtn btnMax" ></button>
+                <button class="topBtn btnLayer" ></button>
+                <button class="topBtn btnClose"></button>
+            </div>
+        </div>
+        <div class="middle-layer">
+            <div id="bot">
+            </div>
+        </div>
+        <div class="bottom-layer">
+            <button class="btnMenu hamburgerBtn">&nbsp;</button>
+            <input type="text" name="message" id="message" placeholder="메시지를 입력하세요"/>
+            <input type="button" name="sendBtn" id="sendBtn" value="전송" disabled/>
+        </div>
+    </div>
+    <!--// 챗봇 영역 -->
+
+    <!-- 메뉴 박스 영역 -->
+    <div class="menuBox" style="display: none;">
+        <div class="menuInner">
+            <p><span>메뉴</span></p>
+        	<ul>
+                <li><span><a href="#" onclick="viewMenu('안녕');">안녕</a></span></li>
+                <li><span><a href="#" onclick="viewMenu('텍스트1');">텍스트1</a></span></li>
+                <li><span><a href="#" onclick="viewMenu('사진1');">사진1</a></span></li>
+                <li><span><a href="#" onclick="viewMenu('사진6');">사진6</a></span></li>
+            </ul>
+            <div class="indexIcon"></div>
+        </div>
+    </div>
+    <!--// 메뉴 박스 영역 -->
+</body>
+
+</html>

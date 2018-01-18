@@ -1,0 +1,23 @@
+
+@font-face {
+font-family: 'HyundaiSansTextKRRegular';
+src: url('../fonts/HyundaiSansTextKRRegular.eot');
+src: url('../fonts/HyundaiSansTextKRRegular.eot?#iefix') format('embedded-opentype'), 
+	url('../fonts/HyundaiSansTextKRRegular.woff2') format('woff2'), 
+	url('../fonts/HyundaiSansTextKRRegular.woff') format('woff'), 
+	url('../fonts/HyundaiSansTextKRRegular.ttf') format('truetype'),
+	url('../fonts/HyundaiSansTextKRRegular.svg#HyundaiSansTextKRRegular') format('svg');
+}
+
+
+.wc-chatview-panel{
+font-family: "HyundaiSansTextKRRegular", sans-serif;
+  
+font-size: 14px;
+  
+line-height: 1.42857143;
+  
+color: #333333;
+  
+background-color: #ffffff;
+}

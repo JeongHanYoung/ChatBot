@@ -1,0 +1,61 @@
+﻿body { background-color: #a1c4a3; }
+.bot-layer{
+    background-color: #FFFFFF;
+    width: 400px;
+    height: 645px;
+}
+.top-layer {
+    width: 100%;
+    height: 25px;
+    background-color: #34373c;
+}
+.top-btn{
+    float: right;
+}
+.topBtn{
+    width: 14px;
+    height: 14px;
+    border-width: 0;
+    margin: 5px;
+    cursor: pointer;
+}
+.btnMax{
+    background: url(https://bot.hyundai.com/assets/images/01_title_min_btn@1x.png) no-repeat;
+}
+.btnLayer{
+    background: url(https://bot.hyundai.com/assets/images/01_title_full_btn@1x.png) no-repeat;
+}
+.btnClose{
+    background: url(https://bot.hyundai.com/assets/images/01_title_close_btn@1x.png) no-repeat;
+}
+.middle-layer {
+    width: 100%;
+    height: 585px;
+}
+.bottom-layer {
+    width: 100%;
+    height: 30px;
+}
+#bot {
+    background-color: #f1f3f6;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+#message{
+    width: 77%;
+    height: 85%;
+    padding: 0;
+    border-width: 0;
+}
+#sendBtn {
+    width: 10%;
+    height: 85%;
+}
+.timeStampUser{
+    font-size:9px;
+    color:gray;
+    line-height:15px;
+    text-align:right;
+    margin: 0;
+}

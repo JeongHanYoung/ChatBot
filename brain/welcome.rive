@@ -1,0 +1,24 @@
+﻿! version = 2.0
+
++ 텍스트1
+- {"type": "text", "contents": [{"text": "반가워요 나는 RiveScript 챗봇입니다:)"}]}
++ 안녕
+- {"type": "carousel", "contents": [{"text": "다이얼로그 데모 메뉴입니다 선택해주세요~", "buttons": [{"type": "imBack", "title": "텍스트보기", "value": "텍스트1"},{"type": "imBack", "title": "사진1보기", "value": "사진1"},{"type": "imBack", "title": "사진6보기", "value": "사진6"}]}]}
++ 사진1
+- {"type": "carousel", "contents": [{"text": "안녕하세요 나는 RiveScript 챗봇입니다~", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg", "buttons": [{"type": "imBack", "title": "자세히보기", "value": "안녕"}]}]}
++ 사진2
+- {"type": "carousel", "contents": [{"text": "텍스트1", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트2", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"}]}
++ 사진3
+- {"type": "carousel", "contents": [{"text": "텍스트1", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트2", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트3", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"}]}
++ 사진4
+- {"type": "carousel", "contents": [{"text": "텍스트1", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트2", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트3", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트4", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"}]}
++ 사진5
+- {"type": "carousel", "contents": [{"text": "텍스트1", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트2", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트3", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트4", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트5", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"}]}
++ 사진6
+- {"type": "carousel", "contents": [{"text": "텍스트1", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트2", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트3", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트4", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트5", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"},{"text": "텍스트6", "url": "https://bot.hyundai.com/assets/images/mainfeatureImg/01_Kona.jpg"}]}
++ 미디어1
+- {"type": "media", "contents": [{"text": "미디어 영상1", "url": "https://bot.hyundai.com/assets/images/performance/USP_performance_01.jpg"}]}
++ *
+- {"type": "text", "contents": [{"text": "아직 학습이 미약해요~ 좀 더 열심히 배울게요~"}]}
+- {"type": "text", "contents": [{"text": "그 질문은 해당사항이 없어요ㅜㅜ"}]}
+- {"type": "text", "contents": [{"text": "다시 한번 말씀해 주실래요?ㅎㅎㅎ"}]}
