@@ -3,22 +3,12 @@ var Connection = require('tedious').Connection;
 var Request = require('tedious').Request;
 var TYPES = require('tedious').TYPES;
 var async = require('async');
+var dbConfig = require('./dbConfig').dbConfig;
 //const sql = require('mssql');
 //var connPoolPromise = null;
 
 var conn ;
 var request ;
-
-var dbConfig = {
-	server: "taiholab.database.windows.net",
-	userName: "taihoinst",
-	password: "taiho9788!",
-	options: {
-		encrypt: true,
-		database: "chatMng",
-		rowCollectionOnRequestCompletion: true
-	}
-};
 
 var jsonArray = [];
 //function getQuery(query) {
@@ -38,8 +28,9 @@ var jsonArray = [];
 
 
 
-function Start(query,callback) {
+function Start(query,message,callback) {
 	console.log('Starting...');
+	var message = message;
 	jsonArray = [];
 	conn = new Connection(dbConfig);
 	//callback(null, 'Jake', 'United States');
@@ -66,7 +57,7 @@ var Test = [
 
 		// Read all rows from table
 		
-		var testQueryString = 'SELECT QUESTION , ANSWER FROM CB_COMMON;';
+        var testQueryString = 'SELECT QUESTION , ANSWER FROM CB_COMMON;';
 		var request = new Request(testQueryString, function (err, rowCount, rows) {
 			if (err) {
 				console.log(err);

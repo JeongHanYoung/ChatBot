@@ -15,38 +15,6 @@ var DBUtil = require('../modules/DB/DBUtil');
 //bot.unicodePunctuation = new RegExp(/[.,!?;:]/g);
 //bot.loadFile("brain/welcome.rive", loading_done, loading_error);
 
-//KAKAO
-router.get('/keyboard',function(req, res){
-    let keyboard = {
-      "type" : "text"
-    };
-
-    res.send(keyboard);
-});
-
-router.post('/message', function (req, res) {
-    let user_key = decodeURIComponent(req.body.user_key);
-    let type = decodeURIComponent(req.body.type); 
-    let content = decodeURIComponent(req.body.content); // 질문
-
-	DBUtil.Start("Test", function (err, rs) {
-
-		if (err) { console.log("index error : " + err); }
-		else {
-
-			console.log("KAKAO : " + rs[0]["ANSWER"]);
-			
-		}
-		let answer = {
-			"message": {
-				"text": rs[0]["ANSWER"]
-			}
-		}
-	
-		res.send(answer);
-	});
-});
-
 //WEB
 router.get('/', function (req, res) {
 	
@@ -57,7 +25,7 @@ router.get('/', function (req, res) {
 router.post('/input', function (req, res) {
 	console.log("req.body.message : " + req.body.message);
 
-	DBUtil.Start("Test", function (err, rs) {
+	DBUtil.Start("Test",req.body.message, function (err, rs) {
 
 		if (err) { console.log("index error : " + err); }
 		else {

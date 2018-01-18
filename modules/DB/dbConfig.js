@@ -1,12 +1,12 @@
-﻿export default {
-	database: {
+﻿module.exports = {
+	dbConfig: {
 		server: "taiholab.database.windows.net",
-		port: 1433,
-		user: "taihoinst",
+		userName: "taihoinst",
 		password: "taiho9788!",
-		database: "taihoLab_2",
 		options: {
-			encrypt: true
+			encrypt: true,
+			database: "chatMng",
+			rowCollectionOnRequestCompletion: true
 		}
 	}
 };
