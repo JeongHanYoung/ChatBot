@@ -5,6 +5,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>chatBot</Name>
     <RootNamespace>chatBot</RootNamespace>
+    <NameOfLastUsedPublishProfile>KakaoWebChatBot - Web Deploy</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -45,6 +46,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Content Include="brain\welcome.rive" />
+    <None Include="KakaoWebChatBot - Web Deploy.pubxml" />
+    <None Include="KakaoWebChatBot - FTP.pubxml" />
     <Content Include="package.json" />
     <Content Include="public\css\css_index.css">
       <SubType>Code</SubType>
