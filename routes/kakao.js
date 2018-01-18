@@ -29,7 +29,7 @@ router.post('/message', function (req, res) {
     let type = decodeURIComponent(req.body.type); 
     let content = decodeURIComponent(req.body.content); // 질문
 
-	DBUtil.Start("Test", function (err, rs) {
+    DBUtil.Start("Test", content, function (err, rs) {
 
 		if (err) { console.log("index error : " + err); }
 		else {

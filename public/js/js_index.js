@@ -8,7 +8,7 @@ $(function () {
         appendLoadingDiv();
         $.ajax({
             type: 'POST',
-            url: '/web/input',
+            url: '/input',
             data: { 'message': message },       
             success: function (data) {
                 data = JSON.parse(data);
