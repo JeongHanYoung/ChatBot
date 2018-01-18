@@ -41,7 +41,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="public\js\js_index.js" />
-    <Compile Include="routes\index.js" />
+    <Compile Include="routes\kakao.js" />
+    <Compile Include="routes\web.js" />
     <Compile Include="test.js">
       <SubType>Code</SubType>
     </Compile>
