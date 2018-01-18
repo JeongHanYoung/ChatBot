@@ -31,11 +31,20 @@ router.post('/message', function (req, res) {
                 .input('message', sql.NVarChar, content)
                 .query(textQueryString)
             let rows = result1.recordset;
+            let result;
 
-            let result = {
-                "message": {
-                    "text": rows[0].answer
-                }
+            if (rows.length > 0) {
+                result = {
+                    "message": {
+                        "text": rows[0].answer
+                    }
+                };
+            } else {
+                result = {
+                    "message": {
+                        "text": "아직 답변이 준비되어 있지 않습니다."
+                    }
+                };
             }
             res.send(result);
 

@@ -27,13 +27,22 @@ router.post('/input', function (req, res) {
                 .input('message', sql.NVarChar, req.body.message)
                 .query(textQueryString)
             let rows = result1.recordset;
-
-            let result = {
-                "type": "text",
-                "contents": [
-                    { "text": rows[0].answer }
-                ]
-            };
+            let result;
+            if (rows.length > 0) {
+                result = {
+                    "type": "text",
+                    "contents": [
+                        { "text": rows[0].answer }
+                    ]
+                };
+            } else {
+                result = {
+                    "type": "text",
+                    "contents": [
+                        { "text": "아직 답변이 준비되어 있지 않습니다." }
+                    ]
+                };
+            }
             res.send(result);
 
         } catch (err) {
