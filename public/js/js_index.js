@@ -6,6 +6,8 @@ $(function () {
         var message = (($('#message').val() != '')? $('#message').val() : $('#menuMsg').val());
         addUserMsg(message);
         appendLoadingDiv();
+        $('#sendBtn').attr('disabled', 'disabled');
+        $('#message').val('')
         $.ajax({
             type: 'POST',
             url: '/input',
