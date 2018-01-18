@@ -1,19 +1,12 @@
 ﻿'use strict';
 var express = require('express');
-var router = express.Router();
-//var RiveScript = require('rivescript');
 
-const sql = require('mssql');
+var sql = require('mssql');
+var dbConfig = require('../modules/DB/dbConfig');
 
 var luis = require('../modules/LUIS/Luis');
-var DBUtil = require('../modules/DB/DBUtil');
 
-//var request = require('request');
-//var async = require('async');
-
-//var bot = new RiveScript({ utf8: true, debug: false });
-//bot.unicodePunctuation = new RegExp(/[.,!?;:]/g);
-//bot.loadFile("brain/welcome.rive", loading_done, loading_error);
+var router = express.Router();
 
 //KAKAO
 router.get('/keyboard',function(req, res){
@@ -29,22 +22,34 @@ router.post('/message', function (req, res) {
     let type = decodeURIComponent(req.body.type); 
     let content = decodeURIComponent(req.body.content); // 질문
 
-    DBUtil.Start("Test", content, function (err, rs) {
+    (async () => {
+        try {
+            var textQueryString = "SELECT question, answer FROM cb_common WHERE question = @message";
 
-		if (err) { console.log("index error : " + err); }
-		else {
+            let pool = await sql.connect(dbConfig)
+            let result1 = await pool.request()
+                .input('message', sql.NVarChar, content)
+                .query(textQueryString)
+            let rows = result1.recordset;
 
-			console.log("KAKAO : " + rs[0]["ANSWER"]);
-			
-		}
-		let answer = {
-			"message": {
-				"text": rs[0]["ANSWER"]
-			}
-		}
-	
-		res.send(answer);
-	});
+            let result = {
+                "message": {
+                    "text": rows[0].answer
+                }
+            }
+            res.send(result);
+
+        } catch (err) {
+            console.log(err)
+
+        } finally {
+            sql.close();
+        }
+    })()
+
+    sql.on('error', err => {
+    })
+
 });
 
 module.exports = router;

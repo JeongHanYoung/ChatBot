@@ -11,7 +11,7 @@ $(function () {
             url: '/input',
             data: { 'message': message },       
             success: function (data) {
-                data = JSON.parse(data);
+                //data = JSON.parse(data);
                 $('#message').val('');
                 msgTypeHandler(data);
             }

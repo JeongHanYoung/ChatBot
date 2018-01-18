@@ -43,12 +43,10 @@
     <Compile Include="public\js\js_index.js" />
     <Compile Include="routes\kakao.js" />
     <Compile Include="routes\web.js" />
-    <Compile Include="test.js">
-      <SubType>Code</SubType>
-    </Compile>
     <Content Include="brain\welcome.rive" />
     <None Include="KakaoWebChatBot - Web Deploy.pubxml" />
     <None Include="KakaoWebChatBot - FTP.pubxml" />
+    <Content Include="dialog_type_json.txt" />
     <Content Include="package.json" />
     <Content Include="public\css\css_index.css">
       <SubType>Code</SubType>
