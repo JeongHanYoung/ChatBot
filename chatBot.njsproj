@@ -34,6 +34,8 @@
     <Compile Include="modules\DB\dbConfig.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="modules\DB\queryConfig.js" />
+    <Compile Include="modules\Util\JsonUtil.js" />
     <Compile Include="modules\DB\DBUtil.js">
       <SubType>Code</SubType>
     </Compile>
@@ -51,6 +53,13 @@
     <Content Include="public\css\css_index.css">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="public\images\03_chat_menu_btn_OUT%401x.png" />
+    <Content Include="public\images\03_chat_menu_btn_OV%401x.png" />
+    <Content Include="public\images\alice_profile_icn_35.png" />
+    <Content Include="public\images\ico_index.png" />
+    <Content Include="public\images\ico_mMenu.png" />
+    <Content Include="public\images\ico_play_50.png" />
+    <Content Include="public\images\loading.gif" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +67,7 @@
     <Folder Include="modules\" />
     <Folder Include="modules\LUIS\" />
     <Folder Include="modules\DB\" />
+    <Folder Include="modules\Util\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\js\" />

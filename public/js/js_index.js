@@ -2,6 +2,17 @@ var botMessageCnt = 1 // 봇 메시지 고유번호
 
 $(function () {
 
+    $.ajax({
+        type: 'POST',
+        url: '/init',
+        data: {},
+        success: function (data) {
+            for (var i = 0; i < data.length; i++) {
+                msgTypeHandler(data[i]);
+            }
+        }
+    });
+
     $('#sendBtn').click(function () {
         var message = (($('#message').val() != '')? $('#message').val() : $('#menuMsg').val());
         addUserMsg(message);
@@ -53,7 +64,9 @@ $(function () {
         }else{
             $('.btnMenu').removeClass('hamburgerBtnAction').addClass('hamburgerBtn');
         }
-     });
+    });
+
+    
 })
 
 //통합 현재시간 구하는 함수
@@ -221,6 +234,17 @@ function addBotCarouselMsg(contents){
     });
 }
 
+// Media 봇 메시지 이미지 추가 함수
+function addBotMediaImg(contents) {
+    var mediaImgHtml = '';
+    if (contents[0].url != null && contents[0].url.length > 0) {
+        mediaImgHtml += '<img src="' + contents[0].url + '">';
+        mediaImgHtml += '<div class="playImg"></div>';
+    }
+
+    return mediaImgHtml;
+}
+
 // Media 봇 메시지 추가 함수
 function addBotMediaMsg(contents){
     var botMediaMsgHtml = '' +
@@ -240,13 +264,14 @@ function addBotMediaMsg(contents){
                                        '<li class="wc-carousel-item wc-carousel-play">' +
                                             '<div class="wc-card hero">' +
                                                 '<div class="wc-card-div imgContainer">' +
-                                                    '<img src="' + contents[0].url + '">' +
-                                                    '<div class="playImg"></div>' +
+                                                        addBotMediaImg(contents) +
                                                     '<div class="hidden" alt="' + contents[0].text + '"></div>' +
                                                     '<div class="hidden" alt="https://www.youtube.com/embed/cr-XihCw1GU?rel=0"></div>' +
                                                 '</div>' +
                                                 '<h1>' + contents[0].text + '</h1>' +
-                                                '<ul class="wc-card-buttons"></ul>' +
+                                                '<ul class="wc-card-buttons" style="padding: 0;">' +
+                                                    addBotBtnMsg(contents[0].buttons) +
+                                                '</ul >' +
                                             '</div>' +
                                         '</li>' +
                                     '</ul>' +
@@ -267,6 +292,15 @@ function addBotMediaMsg(contents){
     '</div>';
 
     appendBotDiv(botMediaMsgHtml, true);
+
+    //append 후 이벤트 핸들러 연결
+    $('.wc-card-buttons > li > button').each(function (i, e) {
+        $(e).off('click');
+        $(e).on('click', function () {
+            $('#message').val($(e).attr('alt'))
+            $('#sendBtn').click();
+        });
+    });
 }
 
 // Carousel 슬라이드 버튼

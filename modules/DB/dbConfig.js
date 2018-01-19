@@ -2,7 +2,7 @@
     user: 'taihoinst',
     password: 'taiho9788!',
     server: 'taiholab.database.windows.net',
-    database: 'chatMng',
+    database: 'taiholab_2',
     options: {
         encrypt: true
     }
