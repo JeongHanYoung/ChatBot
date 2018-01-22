@@ -46,7 +46,7 @@ router.post('/init', function (req, res) {
                     let result = await pool.request()
                         .input('dlgId', sql.Int, row.DLG_ID)
                         .input('useYn', sql.NVarChar, 'Y')
-                        .query(queryString.initTextQuery)
+                        .query(queryString.selectTextDlgQuery)
 
                     let rows = result.recordset;
                     item = json.textParse(rows[0]);
@@ -57,7 +57,7 @@ router.post('/init', function (req, res) {
                     let result = await pool.request()
                         .input('dlgId', sql.Int, row.DLG_ID)
                         .input('useYn', sql.NVarChar, 'Y')
-                        .query(queryString.initcardQuery)
+                        .query(queryString.selectMediaDlgQuery)
 
                     let rows = result.recordset;
                     item = json.mediaParse(rows[0]);
@@ -79,12 +79,13 @@ router.post('/init', function (req, res) {
 });
 
 router.post('/input', function (req, res) {
-	console.log("[WEB]req.body.message : " + req.body.message);
+	//console.log("[WEB]req.body.message : " + req.body.message);
     var message = req.body.message;
     
     (async () => {
         try {
             let pool = await sql.connect(dbConfig)
+            var returnData = [];
 
             //금칙어 체크
             let result = await pool.request()
@@ -99,12 +100,20 @@ router.post('/input', function (req, res) {
                 //캐시 체크
                 var cashMsg = message.replace(/[^(가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9)]/gi, '').replace(/(\s*)/g, "");
                 result = await pool.request()
-                    .input('message', sql.NVarChar, message)
+                    .input('message', sql.NVarChar, cashMsg)
                     .input('result', sql.NVarChar, 'H')
                     .query(queryString.cashMsgQuery)
                 let cashRows = result.recordset;
 
-                if (cashRows.length > 0) {// 캐시OK
+                
+                if (cashRows.length == 0) { // 캐시NO
+                    console.log('캐시가 없는 경우');
+                    result = await pool.request()
+                        .input('luisAppId', sql.NVarChar, 'LUIS_APP_ID')
+                        .query(queryString.selectLuisQuery)
+                    let luisRows = result.recordset;
+
+                } else {
                     var intentName = cashRows[0].LUIS_INTENT;
 
                     //LUIS INTENT 이름 체크
@@ -129,7 +138,7 @@ router.post('/input', function (req, res) {
                             result = await pool.request()
                                 .input('entities', sql.NVarChar,
                                 (entitiesRows.ENTITIES.length > cashRows[0].LUIS_ENTITIES.length ||
-                                intentName == null || intentName == '') ? entitiesRows.ENTITIES : cashRows[0].LUIS_ENTITIES)
+                                    intentName == null || intentName == '') ? entitiesRows.ENTITIES : cashRows[0].LUIS_ENTITIES)
                                 .query(queryString.defineTypeChkSpareQuery)
                             relationRows = result.recordset;
 
@@ -164,15 +173,50 @@ router.post('/input', function (req, res) {
                         }
                     }
 
-                    if (apiFlag == "COMMON" && relationRows.length > 0) { //1325줄
+                    if (apiFlag == "COMMON" && relationRows.length > 0) { // 1325줄
+                        for (var i = 0; i < relationRows.length; i++) {
+                            result = await pool.request()
+                                .input('dlgId', sql.Int, relationRows[i].DLG_ID)
+                                .input('useYn', sql.NVarChar, 'Y')
+                                .query(queryString.selectDigQuery)
+                            let dlgRows = result.recordset;
 
+                            var item = {};
+
+                            if (dlgRows[0].DLG_TYPE == textDlg) {
+                                result = await pool.request()
+                                    .input('dlgId', sql.Int, dlgRows[0].DLG_ID)
+                                    .input('useYn', sql.NVarChar, 'Y')
+                                    .query(queryString.selectTextDlgQuery)
+
+                                let textRows = result.recordset;
+                                item = json.textParse(textRows[0]);
+
+                            } else if (dlgRows[0].DLG_TYPE == cardDlg) {
+                                result = await pool.request()
+                                    .input('dlgId', sql.Int, dlgRows[0].DLG_ID)
+                                    .input('useYn', sql.NVarChar, 'Y')
+                                    .query(queryString.selectCardDlgQuery)
+
+                                let cardRows = result.recordset;
+                                item = json.cardParse(cardRows);
+
+                            } else if (dlgRows[0].DLG_TYPE == mediaDlg) {
+                                result = await pool.request()
+                                    .input('dlgId', sql.Int, dlgRows[0].DLG_ID)
+                                    .input('useYn', sql.NVarChar, 'Y')
+                                    .query(queryString.selectMediaDlgQuery)
+
+                                let mediaRows = result.recordset;
+                                item = json.mediaParse(mediaRows[0]);
+                            }
+                            returnData.push(item);
+                        }
                     }
-                } else {// 캐시NO
-
                 }
-
-                res.send({ "type": "text", "contents": [{ "text": "확인" }] });
             }
+
+            res.send(returnData);
         } catch (err) {
             console.log(err);
 

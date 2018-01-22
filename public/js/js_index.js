@@ -26,7 +26,9 @@ $(function () {
             success: function (data) {
                 //data = JSON.parse(data);
                 $('#message').val('');
-                msgTypeHandler(data);
+                for (var totCnt = 0; totCnt < data.length; totCnt++) {
+                    msgTypeHandler(data[totCnt]);
+                }
             }
         });
     })
@@ -309,7 +311,7 @@ function scrollPrev(target){
     var left = parseInt($('#scroll-contents-' + count).scrollLeft());
     var liLength = parseInt($('#scroll-contents-' + count).scrollLeft());
     $('#scroll-contents-' + count).animate({scrollLeft: (left-312) +'px'},500,function(){
-        amimateCallback(count,liLength);
+        scrollAmimateCallback(count,liLength);
     });
 }
 function scrollNext(target){

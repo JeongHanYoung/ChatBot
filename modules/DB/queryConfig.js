@@ -15,7 +15,7 @@ module.exports = {
     'ORDER BY ' +
         'DLG_ID '
     ,
-    initTextQuery: '' +
+    selectTextDlgQuery: '' +
     'SELECT ' +
         'CARD_TITLE, ' +
         'CARD_TEXT ' +
@@ -26,14 +26,31 @@ module.exports = {
         'AND ' +
         'USE_YN = @useYn '
     ,
-    initcardQuery: '' +
+    selectCardDlgQuery: '' +
+    'SELECT ' +
+        'CARD_TITLE, CARD_SUBTITLE, CARD_TEXT, IMG_URL, ' +
+        'BTN_1_TYPE, BTN_1_TITLE, BTN_1_CONTEXT, ' +
+        'BTN_2_TYPE, BTN_2_TITLE, BTN_2_CONTEXT, ' +
+        'BTN_3_TYPE, BTN_3_TITLE, BTN_3_CONTEXT, ' +
+        'BTN_4_TYPE, BTN_4_TITLE, BTN_4_CONTEXT, ' +
+        'CARD_DIVISION, CARD_VALUE, CARD_ORDER_NO ' +
+    'FROM ' +
+        'TBL_DLG_CARD ' +
+    'WHERE ' +
+        'DLG_ID = @dlgID ' +
+        'AND ' +
+        'USE_YN = @useYn ' +
+    'ORDER BY CARD_ORDER_NO '
+    ,
+    selectMediaDlgQuery: '' +
     'SELECT ' +
         'CARD_TITLE, CARD_TEXT, MEDIA_URL, ' +
         'BTN_1_TYPE, BTN_1_TITLE, BTN_1_CONTEXT, ' +
         'BTN_2_TYPE, BTN_2_TITLE, BTN_2_CONTEXT, ' +
         'BTN_3_TYPE, BTN_3_TITLE, BTN_3_CONTEXT, ' +
-        'BTN_4_TYPE, BTN_4_TITLE, BTN_4_CONTEXT ' +
-    'FROM ' +
+        'BTN_4_TYPE, BTN_4_TITLE, BTN_4_CONTEXT, ' +
+        'CARD_DIVISION, CARD_VALUE ' +
+    'FROM  ' +
         'TBL_DLG_MEDIA ' +
     'WHERE ' +
         'DLG_ID = @dlgId ' +
@@ -78,7 +95,7 @@ module.exports = {
     'SELECT '+
     'RESULT AS ENTITIES ' +
     'FROM ' +
-    'FN_ENTITY_ORDERBY_ADD(@message)'
+    'FN_ENTITY_ORDERBY_ADD(@message) '
     ,
     defineTypeChkSpareQuery: '' +
     'SELECT ' +
@@ -88,4 +105,30 @@ module.exports = {
         'TBL_DLG_RELATION_LUIS ' +
     'WHERE ' +
         'LUIS_ENTITIES = @entities '
+    ,
+    selectDigQuery: '' +
+    'SELECT ' +
+        'DLG_ID, ' +
+        'DLG_NAME, ' +
+        'DLG_DESCRIPTION, ' +
+        'DLG_LANG, ' +
+        'DLG_TYPE, ' +
+        'DLG_ORDER_NO, ' +
+        'DLG_GROUP ' +
+    'FROM ' +
+        'TBL_DLG ' +
+    'WHERE ' +
+        'DLG_ID = @dlgId ' +
+        'AND ' + 
+        'USE_YN = @useYn '
+    ,
+    selectLuisQuery: '' +
+    'SELECT ' +
+    'CNF_TYPE, CNF_NM, CNF_VALUE ' +
+    'FROM ' +
+    'TBL_CHATBOT_CONF ' +
+    'WHERE ' +
+    'CNF_TYPE = @luisAppId ' +
+    'ORDER BY ' +
+    'CNF_TYPE DESC, ORDER_NO ASC '
 }
