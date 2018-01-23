@@ -50,9 +50,13 @@
     <None Include="KakaoWebChatBot - FTP.pubxml" />
     <Content Include="dialog_type_json.txt" />
     <Content Include="package.json" />
+    <Content Include="public\css\bootstrap_v1.css" />
+    <Content Include="public\css\botchat.css" />
     <Content Include="public\css\css_index.css">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="public\css\HyundaiSansTextKRRegular.css" />
+    <Content Include="public\css\style.css" />
     <Content Include="public\images\03_chat_menu_btn_OUT%401x.png" />
     <Content Include="public\images\03_chat_menu_btn_OV%401x.png" />
     <Content Include="public\images\alice_profile_icn_35.png" />

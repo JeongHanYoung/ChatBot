@@ -3,8 +3,9 @@ var express = require('express');
 
 var sql = require('mssql');
 var dbConfig = require('../modules/DB/dbConfig');
-var queryString = require('../modules/DB/queryConfig');
+var queryConfig = require('../modules/DB/queryConfig');
 var DBUtil = require('../modules/DB/DBUtil');
+var querystr = require('querystring');
 
 var luis = require('../modules/LUIS/Luis');
 
@@ -33,7 +34,7 @@ router.post('/init', function (req, res) {
             let result = await pool.request()
                 .input('dlgGroup', sql.NVarChar, '1')
                 .input('useYn', sql.NVarChar, 'Y')
-                .query(queryString.initQuery)
+                .query(queryConfig.initQuery)
 
             let rows = result.recordset;
 
@@ -46,7 +47,7 @@ router.post('/init', function (req, res) {
                     let result = await pool.request()
                         .input('dlgId', sql.Int, row.DLG_ID)
                         .input('useYn', sql.NVarChar, 'Y')
-                        .query(queryString.selectTextDlgQuery)
+                        .query(queryConfig.selectTextDlgQuery)
 
                     let rows = result.recordset;
                     item = json.textParse(rows[0]);
@@ -57,7 +58,7 @@ router.post('/init', function (req, res) {
                     let result = await pool.request()
                         .input('dlgId', sql.Int, row.DLG_ID)
                         .input('useYn', sql.NVarChar, 'Y')
-                        .query(queryString.selectMediaDlgQuery)
+                        .query(queryConfig.selectMediaDlgQuery)
 
                     let rows = result.recordset;
                     item = json.mediaParse(rows[0]);
@@ -81,7 +82,7 @@ router.post('/init', function (req, res) {
 router.post('/input', function (req, res) {
 	//console.log("[WEB]req.body.message : " + req.body.message);
     var message = req.body.message;
-    
+
     (async () => {
         try {
             let pool = await sql.connect(dbConfig)
@@ -90,7 +91,7 @@ router.post('/input', function (req, res) {
             //금칙어 체크
             let result = await pool.request()
                 .input('message', sql.NVarChar, message)
-                .query(queryString.bannedMsgQuery)
+                .query(queryConfig.bannedMsgQuery)
             let bannedRows = result.recordset;
 
             if (bannedRows.length > 0) {// 금칙어 OK
@@ -102,118 +103,119 @@ router.post('/input', function (req, res) {
                 result = await pool.request()
                     .input('message', sql.NVarChar, cashMsg)
                     .input('result', sql.NVarChar, 'H')
-                    .query(queryString.cashMsgQuery)
+                    .query(queryConfig.cashMsgQuery)
                 let cashRows = result.recordset;
 
-                
+                var intentName;
                 if (cashRows.length == 0) { // 캐시NO
                     console.log('캐시가 없는 경우');
                     result = await pool.request()
-                        .input('luisAppId', sql.NVarChar, 'LUIS_APP_ID')
-                        .query(queryString.selectLuisQuery)
+                        .query(queryConfig.selectLuisQuery)
                     let luisRows = result.recordset;
 
+                    intentName = luis.getLuisResult(message, luisRows);
                 } else {
-                    var intentName = cashRows[0].LUIS_INTENT;
+                    intentName = cashRows[0].LUIS_INTENT;
+                }
 
-                    //LUIS INTENT 이름 체크
-                    var apiFlag;
-                    if (intentName.indexOf('testdrive') == -1 &&
-                        intentName.indexOf('branch') == -1 &&
-                        intentName.indexOf('quot') == -1 &&
-                        intentName.indexOf('recommend') == -1) { // COMMON OK
-                        apiFlag = 'COMMON';
-                    }
+                //LUIS INTENT 이름 체크
+                var apiFlag;
+                if (intentName.indexOf('testdrive') == -1 &&
+                    intentName.indexOf('branch') == -1 &&
+                    intentName.indexOf('quot') == -1 &&
+                    intentName.indexOf('recommend') == -1) { // COMMON OK
+                    apiFlag = 'COMMON';
+                }
 
-                    result = await pool.request()
-                        .input('message', sql.NVarChar, cashMsg)
-                        .query(queryString.entityOrderByAddQuery)
-                    let entitiesRows = result.recordset[0];
+                result = await pool.request()
+                    .input('message', sql.NVarChar, cashMsg)
+                    .query(queryConfig.entityOrderByAddQuery)
+                let entitiesRows = result.recordset[0];
 
-                    let relationRows;
-                    if (entitiesRows.ENTITIES.length > 0) {
+                let relationRows;
+                if (entitiesRows.ENTITIES.length > 0) {
 
-                        if (cashRows[0].LUIS_ENTITIES.length > 0) {
+                    if (cashRows.length > 0) {
 
-                            result = await pool.request()
-                                .input('entities', sql.NVarChar,
-                                (entitiesRows.ENTITIES.length > cashRows[0].LUIS_ENTITIES.length ||
-                                    intentName == null || intentName == '') ? entitiesRows.ENTITIES : cashRows[0].LUIS_ENTITIES)
-                                .query(queryString.defineTypeChkSpareQuery)
-                            relationRows = result.recordset;
+                        result = await pool.request()
+                            .input('entities', sql.NVarChar,
+                            (entitiesRows.ENTITIES.length > cashRows[0].LUIS_ENTITIES.length ||
+                                intentName == null || intentName == '') ? entitiesRows.ENTITIES : cashRows[0].LUIS_ENTITIES)
+                            .query(queryConfig.defineTypeChkSpareQuery)
+                        relationRows = result.recordset;
 
-                        } else {
-
-                            result = await pool.request()
-                                .input('entities', sql.NVarChar, entitiesRows.ENTITIES)
-                                .query(queryString.defineTypeChkSpareQuery)
-                            relationRows = result.recordset;
-                        }
                     } else {
-                        if (apiFlag == 'COMMON') {
-                            result = await pool.request()
-                                .input('entities', sql.NVarChar, cashRows[0].LUIS_ENTITIES)
-                                .query(queryString.defineTypeChkSpareQuery)
-                            relationRows = result.recordset;
-                        }
-                        else {
-                            relationRows = null;
-                        }
+
+                        result = await pool.request()
+                            .input('entities', sql.NVarChar, entitiesRows.ENTITIES)
+                            .query(queryConfig.defineTypeChkSpareQuery)
+                        relationRows = result.recordset;
                     }
-
-                    if (relationRows != null) {
-                        if (relationRows.length > 0 && relationRows[0].DLG_API_DEFINE != null) {
-                            if (relationRows[0].DLG_API_DEFINE == 'D') {
-                                apiFlag = 'COMMON';
-                            }
-                        }
-                    } else {
-                        if (intentName == null || apiFlag == 'COMMON') {
-                            apiFlag = '';
-                        }
+                } else {
+                    if (apiFlag == 'COMMON') {
+                        result = await pool.request()
+                            .input('entities', sql.NVarChar, cashRows[0].LUIS_ENTITIES)
+                            .query(queryConfig.defineTypeChkSpareQuery)
+                        relationRows = result.recordset;
                     }
-
-                    if (apiFlag == "COMMON" && relationRows.length > 0) { // 1325줄
-                        for (var i = 0; i < relationRows.length; i++) {
-                            result = await pool.request()
-                                .input('dlgId', sql.Int, relationRows[i].DLG_ID)
-                                .input('useYn', sql.NVarChar, 'Y')
-                                .query(queryString.selectDigQuery)
-                            let dlgRows = result.recordset;
-
-                            var item = {};
-
-                            if (dlgRows[0].DLG_TYPE == textDlg) {
-                                result = await pool.request()
-                                    .input('dlgId', sql.Int, dlgRows[0].DLG_ID)
-                                    .input('useYn', sql.NVarChar, 'Y')
-                                    .query(queryString.selectTextDlgQuery)
-
-                                let textRows = result.recordset;
-                                item = json.textParse(textRows[0]);
-
-                            } else if (dlgRows[0].DLG_TYPE == cardDlg) {
-                                result = await pool.request()
-                                    .input('dlgId', sql.Int, dlgRows[0].DLG_ID)
-                                    .input('useYn', sql.NVarChar, 'Y')
-                                    .query(queryString.selectCardDlgQuery)
-
-                                let cardRows = result.recordset;
-                                item = json.cardParse(cardRows);
-
-                            } else if (dlgRows[0].DLG_TYPE == mediaDlg) {
-                                result = await pool.request()
-                                    .input('dlgId', sql.Int, dlgRows[0].DLG_ID)
-                                    .input('useYn', sql.NVarChar, 'Y')
-                                    .query(queryString.selectMediaDlgQuery)
-
-                                let mediaRows = result.recordset;
-                                item = json.mediaParse(mediaRows[0]);
-                            }
-                            returnData.push(item);
-                        }
+                    else {
+                        relationRows = null;
                     }
                 }
+
+                if (relationRows != null) {
+                    if (relationRows.length > 0 && relationRows[0].DLG_API_DEFINE != null) {
+                        if (relationRows[0].DLG_API_DEFINE == 'D') {
+                            apiFlag = 'COMMON';
+                        }
+                    }
+                } else {
+                    if (intentName == null || apiFlag == 'COMMON') {
+                        apiFlag = '';
+                    }
+                }
+
+                if (apiFlag == "COMMON" && relationRows.length > 0) { // 1325줄
+                    for (var i = 0; i < relationRows.length; i++) {
+                        result = await pool.request()
+                            .input('dlgId', sql.Int, relationRows[i].DLG_ID)
+                            .input('useYn', sql.NVarChar, 'Y')
+                            .query(queryConfig.selectDigQuery)
+                        let dlgRows = result.recordset;
+
+                        var item = {};
+
+                        if (dlgRows[0].DLG_TYPE == textDlg) {
+                            result = await pool.request()
+                                .input('dlgId', sql.Int, dlgRows[0].DLG_ID)
+                                .input('useYn', sql.NVarChar, 'Y')
+                                .query(queryConfig.selectTextDlgQuery)
+
+                            let textRows = result.recordset;
+                            item = json.textParse(textRows[0]);
+
+                        } else if (dlgRows[0].DLG_TYPE == cardDlg) {
+                            result = await pool.request()
+                                .input('dlgId', sql.Int, dlgRows[0].DLG_ID)
+                                .input('useYn', sql.NVarChar, 'Y')
+                                .query(queryConfig.selectCardDlgQuery)
+
+                            let cardRows = result.recordset;
+                            item = json.cardParse(cardRows);
+
+                        } else if (dlgRows[0].DLG_TYPE == mediaDlg) {
+                            result = await pool.request()
+                                .input('dlgId', sql.Int, dlgRows[0].DLG_ID)
+                                .input('useYn', sql.NVarChar, 'Y')
+                                .query(queryConfig.selectMediaDlgQuery)
+
+                            let mediaRows = result.recordset;
+                            item = json.mediaParse(mediaRows[0]);
+                        }
+                        returnData.push(item);
+                    }
+                }
+            
             }
 
             res.send(returnData);

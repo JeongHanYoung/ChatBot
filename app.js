@@ -5,6 +5,7 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+require('events').EventEmitter.prototype._maxListeners = 500; //max listeners exceeded warning 방지
 
 var web = require('./routes/web');
 var kakao = require('./routes/kakao');

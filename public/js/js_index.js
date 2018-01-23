@@ -176,8 +176,8 @@ function addBotCarouselMsg(contents){
                 '<div class="wc-container imgContainer">' +
                     ((contents[i].url)? '<img src="' + contents[i].url + '">' : '') +
                 '</div>' +
-                '<h1>Kona 핵심기능</h1>' +
-                '<p class="carousel">' + contents[i].text + '</p>' +
+                ((contents[i].title != null) ? '<h1>' + contents[i].title +'</h1>' : '') +
+                ((contents[i].text != null) ? '<p class="carousel">' + contents[i].text + '</p>' : '') +
                 '<ul class="wc-card-buttons" style="padding: 0;">' +
                     addBotBtnMsg(contents[i].buttons) +
                 '</ul>' +
@@ -270,7 +270,8 @@ function addBotMediaMsg(contents){
                                                     '<div class="hidden" alt="' + contents[0].text + '"></div>' +
                                                     '<div class="hidden" alt="https://www.youtube.com/embed/cr-XihCw1GU?rel=0"></div>' +
                                                 '</div>' +
-                                                '<h1>' + contents[0].text + '</h1>' +
+                                                ((contents[0].title != null) ? '<h1>' + contents[0].title + '</h1>' : '') +
+                                                ((contents[0].text != null) ? '<p class="carousel" style="margin: 0; min-height:0;">' + contents[0].text + '</p>' : '') +
                                                 '<ul class="wc-card-buttons" style="padding: 0;">' +
                                                     addBotBtnMsg(contents[0].buttons) +
                                                 '</ul >' +

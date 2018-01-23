@@ -21,6 +21,7 @@ module.exports = {
         var totContents = [];
         for (var idx = 0; idx < data.length; idx++) {
             var contentItemJson = {
+                "title": data[idx].CARD_TITLE,
                 "text": data[idx].CARD_TEXT,
                 "url": data[idx].IMG_URL,
                 "buttons": []

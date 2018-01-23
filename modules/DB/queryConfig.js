@@ -126,9 +126,7 @@ module.exports = {
     'SELECT ' +
     'CNF_TYPE, CNF_NM, CNF_VALUE ' +
     'FROM ' +
-    'TBL_CHATBOT_CONF ' +
-    'WHERE ' +
-    'CNF_TYPE = @luisAppId ' +
+    'TBL_CHATBOT_CONF_20180118 ' +
     'ORDER BY ' +
     'CNF_TYPE DESC, ORDER_NO ASC '
 }

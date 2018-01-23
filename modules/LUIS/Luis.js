@@ -1,65 +1,62 @@
-﻿
-var request = require('request');
+﻿'use strict';
 var querystring = require('querystring');
-var http = require('http');
-//var async = require('async');
-
-//module.exports.getLuis = function () {
-
-//	request('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/f6182bb8-713e-4c03-a412-47217bb22e19?subscription-key=0054d78d200e49a1b26f10c8e9887027&verbose=true&timezoneOffset=0&q=18인치휠', { json: true }, (err, res, body) => {
-//		if (err) { return console.log(err); }
-//		console.log(body);
-//		console.log(body.url);
-//		console.log(body.explanation);
-//		return body;
-//	});
-	
-//}
+var client = require('sync-rest-client');
 
 
-function getLuisResult(query, luisApp) {
-
-	var endPoint = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/';
-	var luisAppId = 'f6182bb8-713e-4c03-a412-47217bb22e19';
-    var queryParams = {
-
-        "subscription-key": "0054d78d200e49a1b26f10c8e9887027",
-        "timezoneOffset": "0",
-        "verbose": false,
-        "q": query
-
-    };
-    var topIntent = '';
+function getLuisResult(query, luisRows) {
+    var subscriptionKey;
+    var luisAppId = [];
+    var topIntent;
     var topScore = 0;
-    for (var i = 0; i < luisApp.length; i++) {
-        var luisRequest = endPoint + luisAppId + '?' + querystring.stringify(queryParams);
-        request(luisRequest, function (err, response, body) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                
-                var data = JSON.parse(body);
-                //console.log(body);
-                //console.log(`Query:${data.query}`);
-                console.log(`Top Intent: ${data.topScoringIntent.intent}`);
-                if (data.topScoringIntent.score > topScore) {
-                    topIntent = data.topScoringIntent.intent;
-                    topScore = data.topScoringIntent.score;
-                }
-                /*
-                for (var i = 0; i < data.entities.length; i++) {
-                    console.log("Entities [" + i + "] : " + data.entities[i]["entity"]);
-                    console.log("Entities [" + i + "] : " + data.entities[i]["type"]);
-                    console.log("Entities [" + i + "] : " + data.entities[i]["score"]);
-                }
-                
-                callback(data.topScoringIntent.intent);
-                */
-            }
 
-        })
+    for (var i = 0; i < luisRows.length; i++) {
+        switch (luisRows[i].CNF_TYPE) {
+            case "LUIS_APP_ID":
+                luisAppId.push(luisRows[i].CNF_VALUE);
+                break;
+            case "LUIS_SUBSCRIPTION":
+                subscriptionKey = luisRows[i].CNF_VALUE;
+                break;
+            case "BOT_ID":
+                break;
+            case "MicrosoftAppId":
+                break;
+            case "MicrosoftAppPassword":
+                break;
+            case "QUOTE":
+                break;
+            case "TESTDRIVE":
+                break;
+            case "LUIS_SCORE_LIMIT":
+                break;
+            case "LUIS_TIME_LIMIT":
+                break;
+            default:
+                break;
+        }
     }
+
+    for (var i = 0; i < luisAppId.length; i++) {
+        var endPoint = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/';
+        var queryParams = {
+
+            "subscription-key": subscriptionKey,
+            "timezoneOffset": "0",
+            "verbose": false,
+            "q": query
+
+        };
+        var intentName;
+        var luisRequest = endPoint + luisAppId[i] + '?' + querystring.stringify(queryParams);
+
+        var response = client.get(luisRequest);
+        //console.log(response.body);
+        if (response.body.topScoringIntent.score > topScore) {
+            topIntent = response.body.topScoringIntent.intent;
+            topScore = response.body.topScoringIntent.score;
+        }
+    }
+
     return topIntent;
 }
 
