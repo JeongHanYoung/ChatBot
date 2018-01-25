@@ -26,9 +26,9 @@ router.get('/', function (req, res) {
 //초기 다이얼로그 
 router.post('/init', function (req, res) {
     (async () => {
-        try {
-            var returnData = [];
+        var returnData = [];
 
+        try {          
             // TBL_DLG 테이블 초기다이얼로그 조회
             let pool = await sql.connect(dbConfig)
             let result = await pool.request()
@@ -96,7 +96,7 @@ router.post('/input', function (req, res) {
             let bannedRows = result.recordset;
 
             if (bannedRows.length > 0) { // 금칙어 OK
-                res.send(json.textParse(bannedRows[0]));
+                returnData.push(json.textParse(bannedRows[0]));
             } else { // 금칙어 NO
 
                 //캐시 체크
@@ -242,6 +242,18 @@ router.post('/input', function (req, res) {
             res.send(returnData);
         } catch (err) {
             console.log(err);
+
+            // 에러 메시지 (임시)
+            returnData = [];
+            var errorItem = {
+                'type': 'text',
+                'contents': [
+                    { 'text': '요청시간 경과 혹은 오류가 발생했어요~ㅜㅜ' }
+                ]
+            };
+
+            returnData.push(errorItem);
+            res.send(returnData);
 
         } finally {
             sql.close();
