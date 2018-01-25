@@ -85,10 +85,10 @@ router.post('/input', function (req, res) {
     var sorryFlag = false;
 
     (async () => {
-        try {
-            let pool = await sql.connect(dbConfig)
-            var returnData = [];
+        let pool = await sql.connect(dbConfig)
+        var returnData = [];
 
+        try {      
             //금칙어 체크
             let result = await pool.request()
                 .input('message', sql.NVarChar, message)
@@ -239,29 +239,30 @@ router.post('/input', function (req, res) {
                 returnData.push(json.textParse(sorryRows[0]));
             }
 
-            res.send(returnData);
         } catch (err) {
             console.log(err);
 
-            // 에러 메시지 (임시)
+            // 에러 메시지
             returnData = [];
-            var errorItem = {
-                'type': 'text',
-                'contents': [
-                    { 'text': '요청시간 경과 혹은 오류가 발생했어요~ㅜㅜ' }
-                ]
-            };
+            var errorResult = await pool.request()
+                .input('dlgGroup', sql.Int, '6')
+                .input('useYn', sql.NVarChar, 'Y')
+                .query(queryConfig.selectSorryDlgText)
 
-            returnData.push(errorItem);
-            res.send(returnData);
+            let sorryRows = errorResult.recordset;
+
+            returnData.push(json.textParse(sorryRows[0]));
 
         } finally {
             sql.close();
+            res.send(returnData);
         }
     })()
 
+    /*
     sql.on('error', err => {
     })
+    */
 
 });
 
