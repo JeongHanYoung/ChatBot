@@ -124,9 +124,19 @@ module.exports = {
     ,
     selectLuisQuery: '' +
     'SELECT ' +
-    'CNF_TYPE, CNF_NM, CNF_VALUE ' +
+        'CNF_TYPE, CNF_NM, CNF_VALUE ' +
     'FROM ' +
-    'TBL_CHATBOT_CONF_20180118 ' +
+        'TBL_CHATBOT_CONF_20180118 ' +
     'ORDER BY ' +
-    'CNF_TYPE DESC, ORDER_NO ASC '
+        'CNF_TYPE DESC, ORDER_NO ASC '
+    ,
+    selectSorryDlgText: '' +
+    'SELECT ' +
+        'TEXT_DLG_ID, DLG_ID, CARD_TITLE, CARD_TEXT ' +
+    'FROM ' +
+        'TBL_DLG_TEXT ' +
+    'WHERE ' +
+        'DLG_ID = (SELECT DLG_ID FROM TBL_DLG WHERE DLG_GROUP = @dlgGroup) ' +
+        'AND ' +
+        'USE_YN = @useYn '
 }
